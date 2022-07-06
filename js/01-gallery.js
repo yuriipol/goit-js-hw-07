@@ -35,27 +35,45 @@ listGallary.insertAdjacentHTML("afterbegin", galleryArray.join(""));
 ! Подключение скрипта и стилей библиотеки модального окна basicLightbox. 
 ! Используй CDN сервис jsdelivr и добавь в проект ссылки на минифицированные (.min) файлы библиотеки.
 */
-
+//Создаем функцию
 const onlistGallaryClick = (event) => {
   event.preventDefault(); // делаем, чтобы страница не перезагружалась
   //делаем проверку на то, сто кликаем именно в тег IMG
   if (event.target.tagName !== "IMG") {
     return;
   }
+
   //обьявляем пернменные, чтобы найти src и href
   let imgSRC = event.target.src;
   const linkHREF = event.target.parentNode.href;
   //присваем значению src значение href
   imgSRC = linkHREF;
   //подключаем моальое окно из библиотеки  basicLightbox (до этого подключив скрипт js и css в index.html)
-  console.log("~ imgSRC", imgSRC);
-
-  const instance = basicLightbox.create(`
+  const instance = basicLightbox.create(
+    `
     <img src="${linkHREF}" class="gallery__image"
 >
-`);
-
+`, //вторым параметром добавляем обьект, в котором будет 2 функции
+    {
+      onShow: (instance) => {
+        //вешаем слушателя событий на window
+        window.addEventListener("keydown", onEscPressKey);
+      },
+      onClose: (instance) => {
+        //убираем слушателя событий на window
+        window.removeEventListener("keydown", onEscPressKey);
+      },
+    }
+  );
+  //вызов функции show()
   instance.show();
+  //создаем функцию закрытия окна по Escape
+  function onEscPressKey(event) {
+    if (event.code === "Escape") {
+      instance.close(); //вызов функции close()
+    }
+  }
 };
+
 //вешаем слушателя событий на div с классом class="gallery"
 listGallary.addEventListener("click", onlistGallaryClick);
