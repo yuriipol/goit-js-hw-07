@@ -31,17 +31,23 @@ listGallary.insertAdjacentHTML("afterbegin", galleryArray.join(""));
 
 /*
 ! Реализация делегирования на div.gallery и получение url большого изображения.
+
+! Подключение скрипта и стилей библиотеки модального окна basicLightbox. 
+! Используй CDN сервис jsdelivr и добавь в проект ссылки на минифицированные (.min) файлы библиотеки.
 */
 
 const onlistGallaryClick = (event) => {
-  event.preventDefault();
-
+  event.preventDefault(); // делаем, чтобы страница не перезагружалась
+  //делаем проверку на то, сто кликаем именно в тег IMG
   if (event.target.tagName !== "IMG") {
     return;
   }
+  //обьявляем пернменные, чтобы найти src и href
   let imgSRC = event.target.src;
   const linkHREF = event.target.parentNode.href;
+  //присваем значению src значение href
   imgSRC = linkHREF;
+  //подключаем моальое окно из библиотеки  basicLightbox (до этого подключив скрипт js и css в index.html)
   console.log("~ imgSRC", imgSRC);
 
   const instance = basicLightbox.create(`
@@ -51,9 +57,5 @@ const onlistGallaryClick = (event) => {
 
   instance.show();
 };
+//вешаем слушателя событий на div с классом class="gallery"
 listGallary.addEventListener("click", onlistGallaryClick);
-
-/*
-! Подключение скрипта и стилей библиотеки модального окна basicLightbox. 
-! Используй CDN сервис jsdelivr и добавь в проект ссылки на минифицированные (.min) файлы библиотеки.
-*/
